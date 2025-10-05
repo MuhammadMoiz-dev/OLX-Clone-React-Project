@@ -45,12 +45,12 @@ const Navbar = ({ children }) => {
           {/* Logo */}
           <div className="flex items-center space-x-2">
             <img
-              src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg"
+              src="https://static.vecteezy.com/system/resources/previews/054/650/826/non_2x/olx-logo-rounded-olx-logo-free-png.png"
               alt="Logo"
               className="w-8 h-8"
             />
             <span className="text-xl font-bold text-gray-800">
-              <Link to="/">MyStore</Link>
+              <Link to="/">OLX Store</Link>
             </span>
           </div>
 
