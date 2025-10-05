@@ -1,10 +1,11 @@
 import React from 'react'
 import './App.css'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import CardHome from './Components/CardHome'
 import Navbar from './Components/Navbar'
 import Login from './Components/Login'
 import Signup from './Components/Signup'
+import Dashboard from './Components/Dashboard'
+import Home from './Components/Home'
 
 function App() {
   return (
@@ -12,9 +13,10 @@ function App() {
 
       <BrowserRouter>
         <Routes>
-          <Route path='/' element={<Navbar><CardHome /></Navbar>} />
+          <Route path='/' element={<Navbar><Home /></Navbar>} />
           <Route path='/login' element={<Navbar><Login /></Navbar>} />
           <Route path='/signup' element={<Navbar><Signup /></Navbar>} />
+          <Route path='/dashboard' element={<Navbar><Dashboard /></Navbar>} />
         </Routes>
       </BrowserRouter>
     </>

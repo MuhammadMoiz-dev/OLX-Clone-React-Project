@@ -1,7 +1,43 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { auth } from "../config/firebase";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import Swal from "sweetalert2";
 
 const Navbar = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+
+  // ✅ Check auth state once
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+
+    return () => unsubscribe(); // cleanup listener
+  }, []);
+
+  const handleLogout = () => {
+    signOut(auth)
+      .then(() => {
+        Swal.fire({
+          title: "Logged out successfully!",
+          text: "You’ve been signed out of your account.",
+          icon: "success",
+          confirmButtonColor: "#2563eb", // Tailwind blue-600
+        }).then(() => {
+          navigate("/login");
+        });
+      })
+      .catch((error) => {
+        Swal.fire({
+          title: "Error!",
+          text: error.message,
+          icon: "error",
+        });
+      });
+  };
+
   return (
     <>
       <nav className="bg-white shadow-sm border-b border-gray-200">
@@ -14,27 +50,46 @@ const Navbar = ({ children }) => {
               className="w-8 h-8"
             />
             <span className="text-xl font-bold text-gray-800">
-              <Link to={'/'}>
-                MyStore
-              </Link>
+              <Link to="/">MyStore</Link>
             </span>
           </div>
 
-          {/* Buttons */}
-          <div className="flex space-x-3">
-            <button className="px-4 py-2 border border-gray-700 text-gray-800 rounded-md hover:bg-gray-100 transition">
-              <Link to={'/login'}>
+          {/* Auth Buttons */}
+          {user ? (
+            <div className="flex space-x-3">
+              <Link
+                to="/dashboard"
+                className="px-4 py-2 border border-gray-700 text-gray-800 rounded-md hover:bg-gray-100 transition"
+              >
+                Dashboard
+              </Link>
+              <button
+                onClick={handleLogout}
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+              >
+                Logout
+              </button>
+            </div>
+          ) : (
+            <div className="flex space-x-3">
+              <Link
+                to="/login"
+                className="px-4 py-2 border border-gray-700 text-gray-800 rounded-md hover:bg-gray-100 transition"
+              >
                 Login
               </Link>
-            </button>
-            <button className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">
-              <Link to={'/signup'}>
+              <Link
+                to="/signup"
+                className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+              >
                 Signup
               </Link>
-            </button>
-          </div>
+            </div>
+          )}
         </div>
       </nav>
+
+      {/* Render page content below navbar */}
       {children}
     </>
   );
