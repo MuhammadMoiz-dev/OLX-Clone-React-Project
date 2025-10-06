@@ -6,6 +6,7 @@ import DashboardCards from "./DashboardCards";
 import { motion, AnimatePresence } from "framer-motion";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "../config/firebase";
+import Swal from "sweetalert2";
 
 function Dashboard() {
   let Pname = useRef()
@@ -47,7 +48,11 @@ function Dashboard() {
         Image: Pimage.current.value,
         Location: Plocation.current.value,
       });
-      console.log("Document written with ID: ", docRef.id);
+      Swal.fire({
+        title: "Product Add Successfully",
+        text: "You clicked the button!",
+        icon: "success"
+      });
     } catch (e) {
       console.error("Error adding document: ", e);
     }
